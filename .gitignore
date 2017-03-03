@@ -1,0 +1,14 @@
+npm-debug.log
+node_modules
+client/**/*.js
+server/**/*.js
+bundle
+.env
+dist
+*.map
+*.map.js
+*.js.map
+!server/bin/www.js
+coverage
+!webpack.config.js
+!karma.conf.js
