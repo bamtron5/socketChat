@@ -1,1 +1,12 @@
-chatpage
+<p>CHAT STATUS: {{vm.chatStatus}}</p>
+
+<hr/>
+
+<form name="chat" ng-submit="vm.sendMessage()">
+  <input type="text" ng-model="vm.msg">
+  <button type="submit">SEND MESSAGE</button>
+</form>
+
+<ul>
+  <li ng-repeat="message in vm.messages">{{message}}</li>
+</ul>

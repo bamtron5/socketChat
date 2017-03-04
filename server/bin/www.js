@@ -4,12 +4,12 @@
  * Module dependencies.
  */
 
-var app = require('../main').app;
-var socketIO = require('../main').socketIO;
-var debug = require('debug')('myapp:server')
-var http = require('http')
-var isDev = app.get('env') === 'development' ? true : false
-
+var app = require('../main');
+var debug = require('debug')('myapp:server');
+var http = require('http');
+var isDev = app.get('env') === 'development' ? true : false;
+var socketIO = require('socket.io');
+var SocketChat = require('../socket/socketChat');
 /**
  * Get port from environment and store in Express.
  */
@@ -20,29 +20,19 @@ app.set('port', port)
 /**
  * Create HTTP server.
  */
-
-var server = http.createServer(app)
-var io = socketIO(server);
-
-io.on('connection', (socket) => {
-  socket.emit('pong', 'HELLO FROM SERVER');
-  console.log('socket connected');
-  socket.on('ping', (msg) => {
-    console.log(`client says ${msg}`);
-    socket.emit('pong', true);
-  });
-});
-
-
+let server = http.createServer(app);
+let io = socketIO(server);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
 
-server.listen(port)
-server.on('error', onError)
-server.on('listening', onListening)
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+io.on('connection', (socket) => new SocketChat(io, socket) );
+
 
 /**
  * Normalize a port into a number, string, or false.

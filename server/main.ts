@@ -11,13 +11,20 @@ import * as morgan from 'morgan';
 import * as passport from 'passport';
 import * as path from 'path';
 import routes from './routes';
-import * as socketIO from 'socket.io';
+import * as http from 'http';
+
+// API
+import * as chat from './api/chat';
+
 
 // replacing deprecated promise
 (<any> mongoose).Promise = global.Promise;
 
 let app = express();
 const isDev = app.get('env') === 'development' ? true : false;
+
+// serve cookies through the proxy
+app.set('trust proxy', 1);
 
 // helmet (read the docs)
 app.use(helmet());
@@ -41,9 +48,6 @@ mongoose.connect(process.env.MONGO_URI)
   }).catch((e) => {
     console.log(e);
   });
-
-// serve cookies through the proxy
-app.set('trust proxy', 1);
 
 // config req.session
 let sess = {
@@ -81,6 +85,9 @@ app.use(passport.session());
 // a server route
 app.use('/', routes);
 
+// api routes
+app.use('/api', chat);
+
 // THIS IS THE INTERCEPTION OF ALL OTHER REQ
 // After server routes / static / api
 // redirect 404 to home for the sake of AngularJS client-side routes
@@ -117,4 +124,4 @@ app.use((err, res) => {
   res.status(err['status'] || 500);
 });
 
-export = {socketIO, app};
+export = app;
