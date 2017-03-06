@@ -9,7 +9,8 @@ class ChatController {
   constructor(
     private socket,
     private $http,
-    private $scope
+    private $scope,
+    private toastr
   ) {
     this.listen();
   }
@@ -33,7 +34,11 @@ class ChatController {
   }
 
   public sendMessage () {
-    this.socket.emit('MESSAGE SERVER', this.msg);
+    if (this.msg !== '') {
+      this.socket.emit('MESSAGE SERVER', this.msg);
+    } else {
+      this.toastr.warning('THE HELL', 'OMG');
+    }
   }
 
   public receiveMessage () {
@@ -52,7 +57,8 @@ class ChatController {
 ChatController.$inject = [
   'socket',
   '$http',
-  '$scope'
+  '$scope',
+  'toastr'
 ];
 
 export default ChatController;

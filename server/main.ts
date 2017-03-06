@@ -14,8 +14,6 @@ import routes from './routes';
 import * as http from 'http';
 
 // API
-import * as chat from './api/chat';
-
 
 // replacing deprecated promise
 (<any> mongoose).Promise = global.Promise;
@@ -86,7 +84,6 @@ app.use(passport.session());
 app.use('/', routes);
 
 // api routes
-app.use('/api', chat);
 
 // THIS IS THE INTERCEPTION OF ALL OTHER REQ
 // After server routes / static / api
